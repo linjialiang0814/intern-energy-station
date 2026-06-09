@@ -466,3 +466,33 @@ python scripts/validate_dashboard_data.py
 - 个人画像 Markdown 包含基础信息、评分解释、风险原因和任务记录。
 - CSV 导出带 UTF-8 BOM，便于 Excel 打开中文。
 - 原有规则、Dashboard、AI 和 LLM fallback 验收不受影响。
+
+## 阶段 11：测试与工程化收口
+
+### 目标
+
+为第二阶段建立统一质量检查入口，并完成工程化总结与后续规划。
+
+### 已完成
+
+- 新增 `scripts/quality_check.py`：
+  - 执行规则校验。
+  - 执行 Dashboard 数据校验。
+  - 执行 AI 功能校验。
+  - 执行 LLM fallback 校验。
+  - 执行评分解释校验。
+  - 执行导出功能校验。
+  - 执行 Python 语法检查。
+- 新增 `docs/engineering_review.md`：
+  - 总结第二阶段完成项。
+  - 梳理当前限制、缺点与风险。
+  - 规划后续值得提升的功能。
+- 更新 `README.md` 和 `docs/final_submission_checklist.md`：增加一键验收命令。
+
+### 反思结论
+
+当前项目的核心 Demo、LLM 增强、导出能力和质量检查已经闭环。仍存在数据未持久化、无登录权限、评分模型未用真实数据校准等限制，但这些属于后续产品化阶段，不应继续阻塞当前作业交付。
+
+### 第二阶段收口判断
+
+第二阶段完成，可以进入最终演示、提交和轻量维护。后续如继续推进，应优先做数据持久化、角色权限、历史趋势和 GitHub Actions 测试。

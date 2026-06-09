@@ -19,6 +19,14 @@
 
 ## 本地验收命令
 
+推荐一键验收：
+
+```bash
+python scripts/quality_check.py
+```
+
+分模块验收：
+
 ```bash
 python scripts/validate_rules.py
 python scripts/validate_dashboard_data.py

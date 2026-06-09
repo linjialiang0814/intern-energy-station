@@ -48,6 +48,14 @@ http://localhost:8501
 
 ## 验收命令
 
+推荐一键验收：
+
+```bash
+python scripts/quality_check.py
+```
+
+也可以分模块执行：
+
 ```bash
 python scripts/validate_rules.py
 python scripts/validate_dashboard_data.py
@@ -83,5 +91,6 @@ python -m py_compile @files
 - 演示脚本：[docs/demo_script.md](docs/demo_script.md)
 - 部署说明：[docs/deployment.md](docs/deployment.md)
 - LLM 配置说明：[docs/llm_config.md](docs/llm_config.md)
+- 第二阶段工程化总结：[docs/engineering_review.md](docs/engineering_review.md)
 - 执行记录：[docs/execution_log.md](docs/execution_log.md)
 - 作业题目备份：[docs/assignment.md](docs/assignment.md)
