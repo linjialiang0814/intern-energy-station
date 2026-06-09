@@ -1,5 +1,11 @@
 # 部署说明
 
+## 当前公网 Demo
+
+已部署到 Streamlit Cloud：
+
+[https://intern-energy-station-linjialiang.streamlit.app/](https://intern-energy-station-linjialiang.streamlit.app/)
+
 ## 推荐方案一：Streamlit Cloud
 
 适合课程作业快速部署。
@@ -26,6 +32,13 @@ app.py
 
 4. Python 依赖会根据 `requirements.txt` 自动安装。
 5. 部署完成后复制公网链接，填入最终作业提交材料。
+
+本项目当前配置：
+
+```text
+Main file path: app.py
+Demo URL: https://intern-energy-station-linjialiang.streamlit.app/
+```
 
 ## 推荐方案二：Hugging Face Spaces
 

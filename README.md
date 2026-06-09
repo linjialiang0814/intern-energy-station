@@ -4,6 +4,10 @@ AI 驱动的业务部实习生成长导航智能看板。
 
 本项目面向 HR、业务导师、实习生和招聘团队，提供实习生成长看板、个人画像、适岗度评分、风险预警、导师反馈分析、实习生成长助手和 HR 周报生成能力。
 
+## 在线 Demo
+
+公网访问地址：[https://intern-energy-station-linjialiang.streamlit.app/](https://intern-energy-station-linjialiang.streamlit.app/)
+
 ## 核心价值
 
 - 帮 HR 快速掌握 20 名实习生的整体进展、风险分布和适岗情况。
@@ -72,7 +76,9 @@ python -m py_compile @files
 
 ## 交付材料
 
+- 在线 Demo：[https://intern-energy-station-linjialiang.streamlit.app/](https://intern-energy-station-linjialiang.streamlit.app/)
 - 方案说明：[docs/solution_description.md](docs/solution_description.md)
+- 最终提交清单：[docs/final_submission_checklist.md](docs/final_submission_checklist.md)
 - 演示脚本：[docs/demo_script.md](docs/demo_script.md)
 - 部署说明：[docs/deployment.md](docs/deployment.md)
 - 执行记录：[docs/execution_log.md](docs/execution_log.md)
