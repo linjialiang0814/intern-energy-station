@@ -29,6 +29,7 @@ AI 驱动的业务部实习生成长导航智能看板。
 - 数据：CSV 模拟数据
 - 数据处理：Pandas
 - AI 能力：规则 + 模板 fallback，预留 Prompt 模板用于后续接入 LLM API
+- LLM 接入：支持火山引擎方舟 OpenAI 兼容接口，未配置时自动 fallback
 - 部署建议：Streamlit Cloud 或 Hugging Face Spaces
 
 ## 本地运行
@@ -81,5 +82,6 @@ python -m py_compile @files
 - 最终提交清单：[docs/final_submission_checklist.md](docs/final_submission_checklist.md)
 - 演示脚本：[docs/demo_script.md](docs/demo_script.md)
 - 部署说明：[docs/deployment.md](docs/deployment.md)
+- LLM 配置说明：[docs/llm_config.md](docs/llm_config.md)
 - 执行记录：[docs/execution_log.md](docs/execution_log.md)
 - 作业题目备份：[docs/assignment.md](docs/assignment.md)

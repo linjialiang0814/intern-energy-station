@@ -65,4 +65,6 @@ if generate_clicked or question:
         for item in plan.mentor_questions:
             st.markdown(f"- {item}")
 
+    source_text = "规则模板 fallback" if plan.used_fallback else f"LLM：{plan.llm_provider}"
+    st.caption(f"生成来源：{source_text}")
     st.success(plan.encouragement)

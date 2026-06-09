@@ -362,3 +362,47 @@ MVP 阶段已经完成。当前项目具备：
 2. 优化页面视觉和演示动线。
 3. 将 `validate_*.py` 升级为正式测试。
 4. 增加导出能力，例如单个实习生画像摘要和周报导出。
+
+## 阶段 8：LLM 接入增强
+
+### 目标
+
+在保留 MVP 稳定性的前提下接入真实大模型能力。优先支持火山引擎方舟 OpenAI 兼容接口，同时保证未配置 API Key、请求失败或模型异常时自动回退到现有规则模板。
+
+### 已完成
+
+- 新增 `services/llm_service.py`：统一 LLM 调用层。
+- 支持环境变量和 Streamlit Secrets 配置：
+  - `ARK_API_KEY`
+  - `ARK_BASE_URL`
+  - `ARK_MODEL`
+  - `LLM_TIMEOUT_SECONDS`
+- 更新 `services/mentor_feedback_service.py`：导师反馈分析增加 LLM 补充洞察。
+- 更新 `services/growth_plan_service.py`：实习生成长助手增加 LLM 鼓励性建议。
+- 更新 `services/report_service.py`：HR 周报正文支持 LLM 生成，失败时回退模板。
+- 更新页面显示生成来源：真实 LLM 或规则模板 fallback。
+- 新增 `.streamlit/secrets.example.toml`。
+- 新增 `docs/llm_config.md`。
+- 新增 `scripts/validate_llm_fallback.py`。
+
+### 验收结果
+
+运行命令：
+
+```bash
+python scripts/validate_llm_fallback.py
+python scripts/validate_ai_features.py
+python scripts/validate_rules.py
+python scripts/validate_dashboard_data.py
+```
+
+结果：
+
+- 未配置 API Key 时，LLM 调用正确回退到 fallback。
+- 导师反馈分析、成长助手、周报生成均可正常输出。
+- 评分规则和 Dashboard 数据聚合未受影响。
+- 全量 Python 语法检查通过。
+
+### 配置说明
+
+详见 `docs/llm_config.md`。公网部署建议通过 Streamlit Cloud Secrets 配置真实 API Key，不要写入代码仓库。

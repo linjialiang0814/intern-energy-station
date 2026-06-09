@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Mapping
 
+from services.llm_service import call_llm
 from services.risk_service import assess_risk, find_risk_keywords
 
 
@@ -30,6 +31,9 @@ class FeedbackAnalysis:
     mentor_actions: list[str]
     hr_actions: list[str]
     message_to_intern: str
+    ai_insight: str
+    llm_provider: str
+    used_fallback: bool
 
 
 def extract_strengths(feedback_text: str) -> list[str]:
@@ -98,6 +102,31 @@ def analyze_mentor_feedback(feedback_text: str, intern_profile: Mapping[str, obj
     else:
         hr_actions.append("HR 暂不需要介入，保持常规观察即可")
 
+    fallback_insight = (
+        f"系统识别到该反馈的核心关注点是“{weaknesses[0]}”。"
+        f"建议导师下周围绕一个可验收任务进行带教，并把反馈从主观描述转成具体行为和交付标准。"
+    )
+    llm_result = call_llm(
+        [
+            {
+                "role": "system",
+                "content": "你是企业 HR 实习生带教分析助手，请输出简洁、可执行、温和的中文建议。",
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"实习生信息：{profile}\n"
+                    f"导师反馈：{feedback_text}\n"
+                    f"已识别优点：{strengths}\n"
+                    f"已识别问题：{weaknesses}\n"
+                    "请补充一段 80 字以内的管理洞察，强调下一步具体动作。"
+                ),
+            },
+        ],
+        fallback=fallback_insight,
+        max_tokens=200,
+    )
+
     return FeedbackAnalysis(
         strengths=strengths,
         weaknesses=weaknesses,
@@ -105,4 +134,7 @@ def analyze_mentor_feedback(feedback_text: str, intern_profile: Mapping[str, obj
         mentor_actions=list(dict.fromkeys(mentor_actions))[:4],
         hr_actions=hr_actions,
         message_to_intern=build_message_to_intern(strengths, weaknesses, role),
+        ai_insight=llm_result.content,
+        llm_provider=llm_result.provider,
+        used_fallback=llm_result.used_fallback,
     )

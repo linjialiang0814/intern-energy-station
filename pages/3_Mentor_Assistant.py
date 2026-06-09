@@ -58,6 +58,8 @@ if analyze_clicked or feedback_text:
     c1.metric("风险等级", analysis.risk_level)
     c2.metric("识别优点", len(analysis.strengths))
     c3.metric("改进点", len(analysis.weaknesses))
+    source_text = "规则模板 fallback" if analysis.used_fallback else f"LLM：{analysis.llm_provider}"
+    st.caption(f"生成来源：{source_text}")
 
     result_left, result_right = st.columns([1, 1])
 
@@ -82,3 +84,6 @@ if analyze_clicked or feedback_text:
 
         st.subheader("给实习生的反馈话术")
         st.success(analysis.message_to_intern)
+
+        st.subheader("AI 补充洞察")
+        st.info(analysis.ai_insight)

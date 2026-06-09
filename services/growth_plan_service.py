@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Mapping
 
+from services.llm_service import call_llm
 from services.scoring_service import clamp_score
 
 
@@ -38,6 +39,8 @@ class GrowthPlan:
     deliverables: list[str]
     mentor_questions: list[str]
     encouragement: str
+    llm_provider: str
+    used_fallback: bool
 
 
 def classify_stage(week: int) -> str:
@@ -96,9 +99,27 @@ def generate_growth_plan(profile: Mapping[str, object], question: str = "") -> G
         "我当前最需要补齐的能力短板是哪一个？",
     ]
 
-    encouragement = (
+    fallback_encouragement = (
         f"{name}当前处于“{stage}”阶段，重点不是一次做完所有事，"
         "而是把任务拆小、及时反馈、沉淀成果。只要每周留下一个可展示的产出，成长路径就会越来越清晰。"
+    )
+    llm_result = call_llm(
+        [
+            {
+                "role": "system",
+                "content": "你是企业实习生成长教练，请给出温和、具体、可执行的中文建议。",
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"实习生：{name}\n岗位：{role}\n当前周次：{week}\n"
+                    f"阶段：{stage}\n能力短板：{weak_dimensions}\n困惑：{question}\n"
+                    "请生成一段 120 字以内的鼓励性成长建议。"
+                ),
+            },
+        ],
+        fallback=fallback_encouragement,
+        max_tokens=220,
     )
 
     return GrowthPlan(
@@ -107,5 +128,7 @@ def generate_growth_plan(profile: Mapping[str, object], question: str = "") -> G
         recommended_tasks=recommended_tasks[:4],
         deliverables=deliverables,
         mentor_questions=mentor_questions,
-        encouragement=encouragement,
+        encouragement=llm_result.content,
+        llm_provider=llm_result.provider,
+        used_fallback=llm_result.used_fallback,
     )

@@ -6,6 +6,8 @@ from typing import Any
 
 import pandas as pd
 
+from services.llm_service import call_llm
+
 
 def _format_role_summary(role_summary: pd.DataFrame) -> str:
     parts = []
@@ -25,7 +27,7 @@ def _format_risk_names(dataset: pd.DataFrame) -> str:
     return "、".join(names[:6])
 
 
-def generate_weekly_report(summary: dict[str, Any]) -> str:
+def build_weekly_report_fallback(summary: dict[str, Any]) -> str:
     """Generate a concise HR weekly report with deterministic content."""
     metrics = summary["metrics"]
     dataset = summary["dataset"]
@@ -59,6 +61,36 @@ def generate_weekly_report(summary: dict[str, Any]) -> str:
         "管理建议：优先处理高风险对象的方向不清、任务拆解和沟通频率问题；"
         "对稳定和高潜实习生增加真实业务任务，沉淀可展示成果，便于后续招聘和转正评估。"
     )
+
+
+def generate_weekly_report(summary: dict[str, Any]) -> str:
+    """Generate HR weekly report with LLM enhancement and fallback."""
+    fallback = build_weekly_report_fallback(summary)
+    metrics = summary["metrics"]
+    role_summary = summary["role_summary"].to_dict(orient="records")
+    risk_records = summary["risk_records"][:6]
+
+    result = call_llm(
+        [
+            {
+                "role": "system",
+                "content": "你是 HR 数据分析助手，请生成适合发给 HR 和业务负责人的中文周报。",
+            },
+            {
+                "role": "user",
+                "content": (
+                    "请基于以下数据生成一份 500 字以内的实习生成长周报，"
+                    "包含整体概况、岗位差异、重点风险和下周动作。\n"
+                    f"核心指标：{metrics}\n"
+                    f"岗位汇总：{role_summary}\n"
+                    f"风险对象：{risk_records}"
+                ),
+            },
+        ],
+        fallback=fallback,
+        max_tokens=700,
+    )
+    return result.content
 
 
 def generate_report_outline(summary: dict[str, Any]) -> dict[str, list[str]]:

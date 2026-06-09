@@ -75,6 +75,7 @@ python -m streamlit run app.py
 
 ## 注意事项
 
-- 当前版本不依赖外部 LLM API，部署时不需要配置 API Key。
+- 当前版本支持火山方舟 LLM 增强，但不强依赖外部 LLM API；未配置 API Key 时会自动回退到规则模板。
+- 如需启用真实模型调用，请在 Streamlit Cloud Secrets 中配置 `ARK_API_KEY`、`ARK_BASE_URL` 和 `ARK_MODEL`，详见 `docs/llm_config.md`。
 - 数据使用 CSV 模拟，适合 Demo 展示。
 - 如果后续接入真实模型，建议通过平台 Secret 管理 API Key，不要写入代码仓库。
